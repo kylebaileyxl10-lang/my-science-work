@@ -1,50 +1,39 @@
 "use strict";
-/**
- * @type {HTMLFormElement}
- */
+
 const form = document.getElementById("uv-form");
-/**
- * @type {HTMLInputElement}
- */
 const address = document.getElementById("uv-address");
-/**
- * @type {HTMLInputElement}
- */
 const searchEngine = document.getElementById("uv-search-engine");
-/**
- * @type {HTMLParagraphElement}
- */
 const error = document.getElementById("uv-error");
-/**
- * @type {HTMLPreElement}
- */
 const errorCode = document.getElementById("uv-error-code");
-const connection = new BareMux.BareMuxConnection("/baremux/worker.js");
+
+// Use the global connection provided by the CDN
+const connection = new BareMux.BareMuxConnection("/bare/");
 
 form.addEventListener("submit", async (event) => {
-	event.preventDefault();
+    event.preventDefault();
 
-	try {
-		await registerSW();
-	} catch (err) {
-		error.textContent = "Failed to register service worker.";
-		errorCode.textContent = err.toString();
-		throw err;
-	}
+    try {
+        await registerSW();
+    } catch (err) {
+        error.textContent = "Failed to register service worker.";
+        errorCode.textContent = err.toString();
+        throw err;
+    }
 
-	const url = search(address.value, searchEngine.value);
+    const url = search(address.value, searchEngine.value);
 
-	let frame = document.getElementById("uv-frame");
-	frame.style.display = "block";
-	let wispUrl =
-		(location.protocol === "https:" ? "wss" : "ws") +
-		"://" +
-		location.host +
-		"/wisp/";
-	if ((await connection.getTransport()) !== "/epoxy/index.mjs") {
-		await connection.setTransport("/epoxy/index.mjs", [
-			{ wisp: wispUrl },
-		]);
-	}
-	frame.src = __uv$config.prefix + __uv$config.encodeUrl(url);
+    let frame = document.getElementById("uv-frame");
+    frame.style.display = "block";
+
+    // Standard Wisp configuration for Vercel
+    let wispUrl = (location.protocol === "https:" ? "wss://" : "ws://") + location.host + "/wisp/";
+    
+    try {
+        // This ensures the connection is ready before setting the transport
+        await connection.setTransport("/epoxy/index.mjs", [{ wisp: wispUrl }]);
+    } catch (e) {
+        console.error("Transport failed, but attempting to load anyway...");
+    }
+
+    frame.src = __uv$config.prefix + __uv$config.encodeUrl(url);
 });
