@@ -3,8 +3,6 @@
 const form = document.getElementById("uv-form");
 const address = document.getElementById("uv-address");
 const searchEngine = document.getElementById("uv-search-engine");
-const error = document.getElementById("uv-error");
-const errorCode = document.getElementById("uv-error-code");
 
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -12,13 +10,11 @@ form.addEventListener("submit", async (event) => {
     try {
         await registerSW();
     } catch (err) {
-        error.textContent = "Failed to register service worker.";
-        errorCode.textContent = err.toString();
+        alert("Failed to register Service Worker: " + err.message);
         throw err;
     }
 
     const url = search(address.value, searchEngine.value);
-    let frame = document.getElementById("uv-frame");
-    frame.style.display = "block";
-    frame.src = __uv$config.prefix + __uv$config.encodeUrl(url);
+    // Use the v2 encode function from your config
+    location.href = __uv$config.prefix + __uv$config.encodeUrl(url);
 });

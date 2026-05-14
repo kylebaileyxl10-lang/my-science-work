@@ -1,6 +1,8 @@
-/* IMPORT THESE FIRST */
 importScripts('uv.bundle.js');
 importScripts('uv.config.js');
+
+/*globals __uv$config*/
+// ... (rest of your existing code)
 
 /*globals __uv$config*/
 
