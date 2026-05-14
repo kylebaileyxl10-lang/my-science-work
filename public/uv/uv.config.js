@@ -2,7 +2,7 @@
 self.__uv$config = {
     prefix: "/uv/service/",
     bare: "/bare/", 
-    wisp: "wss://ruby.rubynetwork.co/wisp/", 
+    wisp: "wss://wisp.mercurynetwork.org/wisp/", 
     encodeUrl: Ultraviolet.codec.xor.encode,
     decodeUrl: Ultraviolet.codec.xor.decode,
     handler: "/uv/uv.handler.js",
