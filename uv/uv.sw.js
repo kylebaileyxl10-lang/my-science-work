@@ -2,9 +2,6 @@ importScripts('uv.bundle.js');
 importScripts('uv.config.js');
 
 /*globals __uv$config*/
-// ... (rest of your existing code)
-
-/*globals __uv$config*/
 
 const Ultraviolet = self.Ultraviolet;
 
@@ -26,6 +23,7 @@ const cspHeaders = [
     "x-powered-by",
     "x-xss-protection",
 ];
+
 const emptyMethods = ["GET", "HEAD"];
 
 class UVServiceWorker extends Ultraviolet.EventEmitter {
@@ -37,9 +35,7 @@ class UVServiceWorker extends Ultraviolet.EventEmitter {
     }
 
     route({ request }) {
-        if (request.url.startsWith(location.origin + this.config.prefix))
-            return true;
-        else return false;
+        return request.url.startsWith(location.origin + this.config.prefix);
     }
 
     async fetch({ request }) {
@@ -287,6 +283,5 @@ class HookEvent {
     }
 }
 
-// Minimal registration listener inside the worker
 const sw = new UVServiceWorker();
 self.addEventListener('fetch', event => event.respondWith(sw.fetch(event)));
