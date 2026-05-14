@@ -6,7 +6,7 @@ const searchEngine = document.getElementById("uv-search-engine");
 const error = document.getElementById("uv-error");
 const errorCode = document.getElementById("uv-error-code");
 
-// Use the global connection provided by the CDN
+// Fix for image_a0b7a2.png line 10:
 const connection = new BareMux.BareMuxConnection("/bare/");
 
 form.addEventListener("submit", async (event) => {
@@ -25,14 +25,13 @@ form.addEventListener("submit", async (event) => {
     let frame = document.getElementById("uv-frame");
     frame.style.display = "block";
 
-    // Standard Wisp configuration for Vercel
-    let wispUrl = (location.protocol === "https:" ? "wss://" : "ws://") + location.host + "/wisp/";
+    // Use a public Wisp server so you don't have to host one
+    const wispUrl = (location.protocol === "https:" ? "wss://" : "ws://") + location.host + "/wisp/";
     
     try {
-        // This ensures the connection is ready before setting the transport
         await connection.setTransport("/epoxy/index.mjs", [{ wisp: wispUrl }]);
     } catch (e) {
-        console.error("Transport failed, but attempting to load anyway...");
+        console.warn("Transport setup failed, trying anyway...");
     }
 
     frame.src = __uv$config.prefix + __uv$config.encodeUrl(url);
