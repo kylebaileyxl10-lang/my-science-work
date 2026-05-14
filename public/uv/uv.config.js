@@ -3,7 +3,7 @@
 self.__uv$config = {
     prefix: "/uv/service/",
     bare: "/bare/", 
-    wisp: "wss://wisp.mercurynetwork.org/", // This connects you to a working proxy server
+    wisp: "wss://wisp.mercurynetwork.org/", 
     encodeUrl: Ultraviolet.codec.xor.encode,
     decodeUrl: Ultraviolet.codec.xor.decode,
     handler: "/uv/uv.handler.js",
