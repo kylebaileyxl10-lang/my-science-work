@@ -6,6 +6,7 @@ const searchEngine = document.getElementById("uv-search-engine");
 const error = document.getElementById("uv-error");
 const errorCode = document.getElementById("uv-error-code");
 
+// Initialize connection using the path set in your vercel.json
 const connection = new BareMux.BareMuxConnection("/bare/");
 
 form.addEventListener("submit", async (event) => {
@@ -23,9 +24,9 @@ form.addEventListener("submit", async (event) => {
     let frame = document.getElementById("uv-frame");
     frame.style.display = "block";
 
-    // Standard Wisp server for Vercel deployments
     let wispUrl = (location.protocol === "https:" ? "wss://" : "ws://") + location.host + "/wisp/";
     
+    // Set transport if it isn't already set
     if (await connection.getTransport() !== "/epoxy/index.mjs") {
         await connection.setTransport("/epoxy/index.mjs", [{ wisp: wispUrl }]);
     }
