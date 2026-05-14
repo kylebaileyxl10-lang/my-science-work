@@ -1,2 +1,0 @@
-/* BareMux Client */
-if(!globalThis.BareMux){(function(){"use strict";const e=async e=>{const t=await fetch(e);return await t.text()};globalThis.BareMux={BareClient:class{constructor(e){this.worker=new Worker(e)}async ready(){return!0}async fetch(e,t){return fetch(e,t)}}}})()}

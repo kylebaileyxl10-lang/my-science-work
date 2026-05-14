@@ -6,12 +6,7 @@ const searchEngine = document.getElementById("uv-search-engine");
 const error = document.getElementById("uv-error");
 const errorCode = document.getElementById("uv-error-code");
 
-let connection;
-try {
-    connection = new BareMux.BareMuxConnection("/bare/");
-} catch (e) {
-    console.error("BareMux connection failed to initialize:", e);
-}
+const connection = new BareMux.BareMuxConnection("/bare/");
 
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -25,16 +20,14 @@ form.addEventListener("submit", async (event) => {
     }
 
     const url = search(address.value, searchEngine.value);
-
     let frame = document.getElementById("uv-frame");
     frame.style.display = "block";
 
+    // Standard Wisp server for Vercel deployments
     let wispUrl = (location.protocol === "https:" ? "wss://" : "ws://") + location.host + "/wisp/";
     
-    try {
+    if (await connection.getTransport() !== "/epoxy/index.mjs") {
         await connection.setTransport("/epoxy/index.mjs", [{ wisp: wispUrl }]);
-    } catch (e) {
-        console.warn("Transport failed, attempting load anyway...");
     }
 
     frame.src = __uv$config.prefix + __uv$config.encodeUrl(url);
